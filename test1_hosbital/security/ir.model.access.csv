@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-
-access.hosbital.patient,access_hosbital_patient,test1_hosbital.model_hosbital_patient,base.group_user,1,1,1,1
-access.hosbital.appointment,access_hosbital_appointment,test1_hosbital.model_hosbital_appointment,base.group_user,1,1,1,1
