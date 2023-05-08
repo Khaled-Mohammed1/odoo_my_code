@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="action_hospital_kids_patient" model="ir.actions.act_window">
+        <field name="name">Kids Patient</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hosbital.patient</field>
+        <field name="domain">[('age','&lt;=',10)]</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Your First Kids Patient
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_kids_patient"
+              name="Kids Patients"
+              parent="menu_patient_master"
+              action="action_hospital_kids_patient"
+              sequence="30"/>
+
+
+</odoo>

@@ -1,0 +1,241 @@
+<?xml version="1.0"?>
+<odoo>
+    <!--عشان اعرف activity view -->
+    <record id="view_hosbital_appointment_activity" model="ir.ui.view">
+        <field name="name">hosbital.appointment_activity</field>
+        <field name="model">hosbital.appointment</field>
+        <field name="arch" type="xml">
+            <activity string="Appointment Activity">
+                <!--هعرف الحاجات اللي هستخدمها في الاكتفتي زي الاسم و الرقم المرجعي للمريض هكذا -->
+                <field name="patient_id"/>
+                <field name="ref"/>
+                <!--الشكل اللي هيظهر فيه البيانات -->
+                <templates>
+                    <!--كل الهري ده عشان يعرض صوره المريض -->
+                    <dev t-name="activity-box">
+                        <!--<img t-att-src="activity_image('اسم الفيلد اللي جواه الصوره ', 'اسم المديول اللي فيه الصوره  ',
+                         record.patient_id.raw_value)" t-att-title="record.patient_id.value" t-att-alt="record.patient_id.value"/>-->
+                        <img t-att-src="activity_image('hosbital.patient', 'image', record.patient_id.raw_value)"
+                             t-att-title="record.patient_id.value" t-att-alt="record.patient_id.value"/>
+                        <div>
+                            <!--الحاجه اللي هتتعرض بجانب الصوره-->
+                            <field name="patient_id" display="full"/>
+                            <field name="ref" display="full"/>
+                        </div>
+                    </dev>
+                </templates>
+            </activity>
+        </field>
+    </record>
+
+
+    <record id="view_hosbital_appointment_search" model="ir.ui.view">
+        <field name="name">hosbital.appointment_search</field>
+        <field name="model">hosbital.appointment</field>
+        <field name="arch" type="xml">
+            <search>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="view_hosbital_appointment_tree" model="ir.ui.view">
+        <field name="name">hosbital.appointment_tree</field>
+        <field name="model">hosbital.appointment</field>
+        <field name="arch" type="xml">
+            <!--  delet = 0 عشان تشيل زرار الحذف  edit = 0 عشان تشيل زرار التعديل -->
+            <!--decoration هنا عشان تلون الفيلد كله علي حسب الحاله -->
+            <!--sample="1" ديه عشان يوريني امثله علي الداتا -->
+            <!--multi_edit="1" ديه عشان اقدر اعمل اكتر من تعديل مره واحده-->
+            <tree delete="0" edit="1" decoration-success="state == 'done'" decoration-info="state == 'in_consultation'"
+                  decoration-danger="state == 'cancel'" sample="1" multi_edit="1">
+                <field name="patient_id"/>
+                <!--optional="show or hide " ديه عشان اعمل دينامك فيو ... عشان تظهرلي ال تلات نقط واخطار منها ايه يظهر وايه لا  -->
+                <field name="ref" optional="hide"/>
+
+
+                <!-- فيلد ال ميني تو وان اللي عملناها -->
+                <!--widget="many2one_avatar" عشان تبين صوره الي يوزر ده واسمه -->
+                <!--widget="many2one_avatar_user" عشان لو دوست علي اسمه يفتحت نافذه شات بيني وبينه -->
+                <field name="doctor_id" widget="many2one_avatar_user"/>
+                <field name="gender" optional="hide"/>
+                <field name="appointment_time" optional="show"/>
+                <field name="booking_date"/>
+                <field name="active" invisible="1"/>
+                <!-- <field name="active" invisible="1"/> ديه عشان يفعل زرار الارشيف وليها كود في ال بايثون -->
+                <field name="activity_ids" widget="list_activity"/>
+                <!--activity_ids ده اللي عاملينله انهارت من الميل ثريت-->
+                <!--widget="list_activity"  عشان تظهر اشكال للاكتيفيتي-->
+                <field name="state"
+                       decoration-success="state == 'done'"
+                       decoration-info="state == 'in_consultation'"
+                       decoration-danger="state == 'cancel'"
+                       decoration-warning="state == 'draft'"
+                       widget="badge"/>
+                <!--widget="badge" عشان تدي الحاله شكل -->
+                <!--decoration.success="لما الحاله == كذا اديها لون '" -->
+                <!--   decoration.success=green-->
+                <!--   decoration.info=light blue-->
+                <!--   decoration.danger=red-->
+                <!--   decoration.warning=orange-->
+                <!--   decoration.muted= no color-->
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="view_hosbital_appointment_form" model="ir.ui.view">
+        <field name="name">hosbital.appointment_form</field>
+        <field name="model">hosbital.appointment</field>
+        <field name="arch" type="xml">
+            <!--     create = 0 ديه بتلغي الانشاء والنسخ  delet = 0 عشان تشيل زرار الحذف  edit = 0 عشان تشيل زرار التعديل -->
+            <form create="1" delete="0" edit="1">
+                <!--hedar ده عشان اعمل شريط الحاله   -->
+                <header>
+                    <!--options="{'clickable':'1'}"  ديه عشان اقدر اختار من الحالات زي محفوظه او منتهي او ملغى  -->
+                    <!--options="{'clickable':'1'}" شيلناها عشان الزراير-->
+                    <!--statusbar_Visible= " الحاله اللي  انا عايزه تظهر بس "  -->
+                    <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,in_consultation,done"/>
+
+                    <!--هنعمل زراير تتحكم في الحاله -->
+                    <!-- <button name="اسم الزرار" string="اسمه اللي هيظهر" type="نوعه " states="ديه الحاله اللي هيظهر فيها بس " class="oe_highlight" ديه عشان الزرار ينور/> -->
+                    <!--type="object" ده قولنا عشان ينفذ كود بايثون-->
+                    <!--data-hotkey="" ديه عشان اعملها اختصار لما ادوس علي الت والحرف اللي اختارته-->
+                    <button name="action_in_consultation" string="In Consultation" type="object" states="draft"
+                            class="oe_highlight"
+                            data-hotkey="x"/>
+                    <button name="action_done" string="Mark As Done" type="object" states="in_consultation"
+                            class="oe_highlight"
+                            data-hotkey="v"/>
+
+                    <button name="action_cancel" string="Cancel" type="object" states="in_consultation,draft"
+                            data-hotkey="z"/>
+
+                    <button name="action_draft" string="Reset To Draft" type="object" states="cancel"
+                            class="oe_highlight"
+                            data-hotkey="0"/>
+
+                </header>
+                <sheet>
+                    <!--   هنا عملت ال dev عشان احدد جواها مثلا نوع الخط زي h2 -->
+                    <dev>
+                        <h2>
+                            <!-- هنا حطيت اسم الفيلد ووزنه عشان يبان عندي الاولويه بالنجوم -->
+                            <field name="priority" widget="priority"/>
+                        </h2>
+                    </dev>
+                    <group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="ref"/>
+                            <field name="gender"/>
+
+                            <!-- فيلد ال ميني تو وان اللي عملناها -->
+                            <!--widget="many2one_avatar" عشان تبين صوره الي يوزر ده واسمه -->
+                            <!--widget="many2one_avatar_user" عشان لو دوست علي اسمه يفتحت نافذه شات بيني وبينه -->
+                            <field name="doctor_id" widget="many2one_avatar"/>
+
+                            <field name="booking_date" default_focus="1"/>
+                            <!--default_focus="1" ديه عشان اخلي المواس يحددها تلقائي اول لما اعمل انشاء او تعديل   -->
+                        </group>
+                        <group>
+                            <!--زر بيحاكي شرط معين عشان يظهر او يخفي سعر المنتجات -->
+                            <!--groups="base.group_no_one" ديه عشان يبان بس في ال ديباج مود بس -->
+                            <field name="hide_sales_price" groups="base.group_no_one"/>
+                            <field name="appointment_time"/>
+                        </group>
+                        <group>
+                            <button name="action_test" string="Object Button"
+                                    confirm="Are You Sure To Execute Python Code ?"
+                                    help="Message will be printed in the log "
+                                    type="object" class="oe_highlight" groups="base.group_no_one"/>
+                            <!--groups="base.group_no_one" ديه عشان يبان بس في ال ديباج مود بس -->
+                            <!--  زرار من نوع object ده معناه انه زر بينفذ كود بايثون -->
+                            <!-- name = "اسم الفانكشن اللي هيتنفذ " ... class ="oe_highlight"  ده عشان الزار يتلون -->
+                            <!--confirm=""     ديه عشان ااكد الاجراء -->
+                            <!--help="الرساله اللي هتظهر لو وقفت علي الزر مثلا "-->
+
+                            <button name="%(test1_hosbital.action_hospital_patient)d" string="Action Button"
+                                    confirm="Are You Sure To Go To Patient Action Window ?"
+                                    help="On Clicking this button , you will be redirected to patiant records"
+                                    type="action" class="oe_highlight" groups="base.group_no_one"/>
+                            <!--groups="base.group_no_one" ديه عشان يبان بس في ال ديباج مود بس -->
+                            <!-- ده زرار من نوع action ده معناه انوا زر بيقوم بعمل اجراء معين زي مثلا عرض صفحه او شاشه معينه-->
+                            <!-- name = %  " (الصفحه اللي عايزها تتعرض مثلا .. ولازم اجيب اسمها كامل بالاكس ام ال )d"  -->
+                            <!--name = % " (اسم المشروع . اسم الاكشن او الصفحه مثلا )d" -->
+                            <!--او ممكن اجيب الاسم ده اني اعمل بحث في settings>technical>window actions>search for the window that you want>from debuag selct>view metadata >it will be in XML ID-->
+                            <!--help="الرساله اللي هتظهر لو وقفت علي الزر مثلا "-->
+                        </group>
+
+                    </group>
+
+                    <!--النوت بوك ديه عشان يبقا عندي جزء تاني تحت الصفحه معروض فيها صفحات تانيه زي مثلا التاريخ المرضي للمريض وكده-->
+                    <notebook>
+                        <page string="Prescription" name="prescription">
+                            <!--  كتبت اسم الحقل وال  placeholder ديه زي ال descraption ده الكلام اللي هيظهر -->
+                            <field name="prescription" placeholder=" Enter The Prescription Here "
+                                   options="{'collaborative': True, 'resizable':True, 'codeview': true }"/>
+                            <!--options="{'collaborative': True}"   ديه عشان اخلي الكتابه تظهر في وقتها من غير ما اعمل حفظ عشان لو بعمل تعديل انا وحد تاني في نفس الوقت -->
+                            <!--'resizable':True ديه عشان اخلي الصفحه قابله لتغير قياسها -->
+                            <!--'codeview':True عشان اشوف كود ال HTML  بيظهر في ال ديباج مود بس -->
+                            <group>
+                            </group>
+                        </page>
+                        <page string="Pharmacy" name="pharmacy">
+                            <!--هنا هنعرض الموديل اللي عملناه one2many-->
+                            <field name="pharmacy_line_ids">
+                                <!--هنا هنعمله tree view عشان يبنا -->
+                                <!--editable="bottom" ديه عشان اقدر اختار من المنتجات علي طول من غير ما تفتحلي شاشه ثانويه-->
+                                <!--editable="top" لو عملتها كده يبقا اللي هضيفه هيظهر في الاول فوق -->
+                                <tree editable="bottom">
+                                    <!--جوا ال tree هنعرض اللي حاجات اللي عرفناها جوا الموديل -->
+                                    <field name="product_id"/>
+                                    <field name="price_unit"
+                                           attrs="{'column_invisible': [('parent.hide_sales_price', '=', True)]}"/>
+                                    <!--attrs="{'اخفي او اظهر ': [('الشرط اللي هوا الفيلد الرئيسي ', '=', True)]}"-->
+                                    <field name="qty"/>
+                                </tree>
+                                <!--وكمان هنعمل form view بنفس الحاجه -->
+                                <form>
+                                    <group>
+                                        <field name="product_id"/>
+                                        <field name="price_unit"
+                                               attrs="{'column_invisible': [('parent.hide_sales_price', '=', True)]}"/>
+                                        <!--attrs="{'اخفي او اظهر ': [('الشرط اللي هوا الفيلد الرئيسي ', '=', True)]}"-->
+                                        <field name="qty"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <!-- Chatter  اللي هيه بيبان فيها اللوج -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_hosbital_appointment" model="ir.actions.act_window">
+        <field name="name">Appointments</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hosbital.appointment</field>
+        <field name="view_mode">tree,form,activity</field>
+        <field name="context">{'search_default_group_by_age': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Your First Appointment
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="appointment"
+              name="Appointment"
+              parent="menu_appointment"
+              action="action_hosbital_appointment"
+              sequence="5"/>
+</odoo>
