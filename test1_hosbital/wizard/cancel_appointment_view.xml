@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="view_cancel_appointment_wizard_form" model="ir.ui.view">
+        <field name="name">view.cancel.appointment.wizard_form</field>
+        <field name="model">cancel.appointment.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="appointment_id" string="Appointment Wizard id"/>
+                        <field name="reason"/>
+                    </group>
+                    <group>
+                        <field name="date_cancel"/>
+                    </group>
+                </group>
+                <!--footer عشان اتحكم في الازرار اللي هتظهر -->
+                <footer>
+                    <!--<button name="الاسم التقني" string="الاسم اللي هيظهر" type="النوع " class="btn-primary" ديه طريقه تانيه عشان الون الزرار
+                               data-hotkey="q" زرار الاختصار مع الالت />-->
+                    <button name="action_cancel_wiz" string="Cancel Appointment" type="object" class="btn-primary"
+                            data-hotkey="q"/>
+
+                    <!--<button special="الاسم التقني" string="الاسم اللي هيظهر" type="النوع " class="btn-secondary" ديه طريقه تانيه عشان الون بس كده ده مش هيتلون
+                            data-hotkey="z" زرار الاختصار مع الالت />-->
+                    <!--special ده زرار وظيفته الخروج او الالغاء يعني -->
+                    <button special="cancel" string="Discard" class="btn-secondary" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <!--الاسم التقني للاكشن ده -->
+    <record id="action_cancel_appointment_wiz_1" model="ir.actions.act_window">
+        <!--name "الاسم اللي هيظهر"-->
+        <field name="name">Cancellation Appointment</field>
+        <!--type "نوع الاكشن ده "-->
+        <!--ir.actions.act_window ده اكشن عشان عرض علي الشاشه -->
+        <field name="type">ir.actions.act_window</field>
+        <!--res_model ده الاسم التقني للموديول داخل ملف البايثون -->
+        <field name="res_model">cancel.appointment.wizard</field>
+        <!--view_mode طريقه العرض -->
+        <field name="view_mode">form</field>
+        <!--<field name="target">new</field> ديه عشان اخليها تظهر كا شاشه ثانويه pop up or wizard -->
+        <field name="target">new</field>
+    </record>
+
+</odoo>
