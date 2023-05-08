@@ -9,6 +9,7 @@ class HosbitalAppointment(models.Model):
     _rec_name = 'patient_id'
 
     patient_id = fields.Many2one(comodel_name='hosbital.patient', string="patient")
+    mo_number = fields.Char(related='patient_id.number')
     gender = fields.Selection(related='patient_id.gender')
     active = fields.Boolean(string="Active", default=True, tracking=True)
     # عشان اعمل زرار ارشيف وليها تابع في ال فيو

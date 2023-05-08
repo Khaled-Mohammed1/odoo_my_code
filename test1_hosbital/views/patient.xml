@@ -7,6 +7,7 @@
             <search>
                 <field name="name" string="Patient Name"
                        filter_domain="['|',('name','ilike',self),('ref','ilike',self)]"/>
+                <field name="number"/>
                 <field name="ref"/>
                 <field name="age"/>
                 <field name="gender"/>
@@ -33,6 +34,7 @@
         <field name="arch" type="xml">
             <tree sample="1">
                 <field name="name" string="Patient Name"/>
+                <field name="number"/>
                 <field name="ref"/>
                 <field name="age"/>
                 <field name="gender"/>
@@ -59,6 +61,7 @@
                         <group>
                             <field name="name" default_focus="1"/>
                             <!--default_focus="1" عشان الماوس يحددها تلقاءي اول لما اعمل انشاء او تعديل -->
+                            <field name="number"/>
                             <field name="date_of_birth"/>
                             <field name="age"/>
                         </group>

@@ -13,6 +13,7 @@ class HosbitalPatient(models.Model):
     age = fields.Integer(string="Age", compute='_compute_age', tracking=True)
     gender = fields.Selection([('male', 'Male'), ('female', 'Female')], string=' Gender', tracking=True)
     active = fields.Boolean(string="Active", default=True, tracking=True)
+    number = fields.Char(string="Mobile Number", size=11)
     # عشان نعمل فيلد نعرض فيه صوره المريض
     image = fields.Image(string="Image")
     # همعمل فيلد many2many
@@ -60,3 +61,7 @@ class HosbitalPatient(models.Model):
             # هنا هنعمل else عشان ميظهر ال error عشان لو مخترناش تاريخ الميلاد
             else:
                 rec.age = 0
+
+    _sql_constraints = [
+        ('number_uniq', 'unique (number)', "Mobile Number Already Exists !"),
+    ]
