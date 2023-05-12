@@ -11,6 +11,7 @@ class CancelAppointmentWizard(models.TransientModel):
     _description = "Cancel Appointment Wizard"
 
     # هنا بعمل انهارت اوفر رايت علي defualt get عشان اخلي الوقت يتاخد تلقائي
+    # يعني من الاخر لو انا عامل default لحاجه هنا بعمل اوفرايت عليها وبغيرها
     @api.model
     def default_get(self, fields):
         res = super(CancelAppointmentWizard, self).default_get(fields)

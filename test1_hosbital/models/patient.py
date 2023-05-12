@@ -62,6 +62,12 @@ class HosbitalPatient(models.Model):
             else:
                 rec.age = 0
 
+    # ده عشان الاسم اللي هيظهر في ال appointment يبقا رقم المريض واسمه
+    def name_get(self):
+        return [(record.id, "[%s] %s" % (record.ref, record.name)) for record in self]
+        # return [(record.id, "[اول واحده اللي هيه ال ref] record.name" % (record.ref, record.name)) for record in self]
+        # عملت table  بتحتوي علي الرقم والاسم
+
     _sql_constraints = [
         ('number_uniq', 'unique (number)', "Mobile Number Already Exists !"),
     ]
