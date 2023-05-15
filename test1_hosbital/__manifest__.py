@@ -26,6 +26,7 @@
         'views/male_patient.xml',
         'views/kids_patient.xml',
         'views/appointment_view.xml',
+        'views/odoo_playground_view.xml',
     ],
     'demo': [],
     'sequence': '-100',
