@@ -33,6 +33,8 @@
     'application': True,
     'installable': True,
     'auto_install': False,
-    'assets': {},
+    'assets': {
+        'web.assets_backend': ['test1_hosbital/static/src/js/framework_sample_test.js'],
+    },
 
 }
