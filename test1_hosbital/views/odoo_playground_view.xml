@@ -28,8 +28,11 @@
         <field name="res_model">odoo.playground</field>
         <field name="view_mode">form</field>
         <field name="target">inline</field>
-    </record>
+        <!--<field name="target">inline</field> ديه عشان يفتح صفحه من غير اختيارات زي حفظ او تعديل -->
+        <!--<field name="target">new</field> ديه عشان يفتح صفحه pop up  -->
 
+    </record>
+    <!--ديه طريقه عشان اعمل منيوا جوا منيوا جوا منيوا من غير parnt id -->
     <menuitem id="menu_technical" name="Technical" sequence="110">
         <menuitem id="menu_playground1" name="Play Ground1" sequence="10">
             <menuitem id="menu_playground" name="Play Ground" action="action_playground" sequence="10"/>

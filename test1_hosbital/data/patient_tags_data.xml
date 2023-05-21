@@ -2,16 +2,14 @@
 <!--ده عشان لو عايز ارفع الداتا للاودو من خلال XML-->
 <odoo>
 
-    <record id="patient_tags_vip" model="patient.tags">
-        <field name="name">VIP</field>
-    </record>
-
     <record id="patient_tags_kid" model="patient.tags">
         <field name="name">KID</field>
+        <field name="sequence">5</field>
     </record>
 
     <record id="patient_tags_master" model="patient.tags">
         <field name="name">Master</field>
+        <field name="sequence">6</field>
         <field name="active" eval="False"/>
         <!--<field name="active" eval="False"/> ده عشان لو عايز اغير قيمه حاجه بوليان عندي واخده افتراض مثلا في البايثون -->
     </record>

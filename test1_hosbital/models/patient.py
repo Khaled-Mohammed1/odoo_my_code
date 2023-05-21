@@ -1,5 +1,6 @@
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from datetime import date
+from odoo.exceptions import ValidationError
 
 
 class HosbitalPatient(models.Model):
@@ -20,6 +21,13 @@ class HosbitalPatient(models.Model):
     # tag_ids = fields.Many2many('co model الموديل الي هاخد منه العلاقه', 'DB table Name اسم التيبول ديه في الداتا بيز',
     # 'First t name اسم اول كولم في العلاقه ' ,'second t name اسم الكولم التاني في العلاقه ' string='Tags')
     tag_ids = fields.Many2many('patient.tags', 'many2may_tags', 'pi', 'ti', string='Tags')
+
+    # ده عشان اخلي مينفعش ادخل تاريخ ميلاد بعد تاريخ اليوم
+    @api.constrains('date_of_birth')
+    def _check_date_of_birth(self):
+        for rec in self:
+            if rec.date_of_birth and rec.date_of_birth > fields.Date.today():
+                raise ValidationError(_("The Entered Date Of Birth Is Not Acceptable"))
 
     # method overwrite
     # عشان اعمل اوفررايت علي الميثود اللي موجوده يبقا بالشكل ده

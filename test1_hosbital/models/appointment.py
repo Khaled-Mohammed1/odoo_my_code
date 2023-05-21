@@ -6,7 +6,7 @@ class HosbitalAppointment(models.Model):
     _description = "hosbital Appointment"
     _inherit = ['mail.thread', 'mail.activity.mixin']
     # ديه عشان يظهر اسم المريض فوق جمب اسم الصفحه (appointment /  او رقمه او اي حاجه عايزها تتعرض name of patient )
-    _rec_name = 'patient_id'
+    _rec_name = 'appref'
 
     patient_id = fields.Many2one(comodel_name='hosbital.patient', string="patient")
     mo_number = fields.Char(related='patient_id.number')
@@ -45,6 +45,31 @@ class HosbitalAppointment(models.Model):
     # ده عشان نعمل زرار وهمي عشان يعمل شرط معين عشان يخفي او يظهر سعر المنتجات
     # هنضيفه جوا الموديل الرئيسي
     hide_sales_price = fields.Boolean(string="Hide Sales Price")
+    appref = fields.Char(string="appointment reference")
+
+    @api.model
+    def create(self, vals):
+        # هنا بنعدل علي ميثود الانشاء
+        vals['appref'] = self.env['ir.sequence'].next_by_code('hospital.appointment.ref.id')
+        # vals['الفيلد اللي هنعدل عليها '] = 'التعديل '
+        # vals['app_ref'] = self.env['ir.sequence'].next_by_code('الاسم التقني لملف التسلسل في الاكس ام ال ')
+        # ----------------------------------------------------------------
+        # return super(اسم الكلاس مديول,self).create(اللي موجود في القوس فوق بعد سيلف)
+        # الامر ده مهم عشان ينفذ الميثود الاساسيه بعد التعديل
+        return super(HosbitalAppointment, self).create(vals)
+
+    # method overwrite
+    # ده عشان نعدل علي التعديل ان في حاله ان ال رقم التسلسلي فاضي ضيف تسلسل
+    def write(self, vals):
+        # and not vals.get('app_ref') ديه بقوله لو المريض واخد اي مدخل غير التسلسل اللي عاملينه سيبه متغيروش
+        if not self.appref and not vals.get('appref'):
+            vals['appref'] = self.env['ir.sequence'].next_by_code('hospital.appointment.ref.id')
+            # vals['الفيلد اللي هنعدل عليها '] = 'التعديل '
+            # vals['app_ref'] = self.env['ir.sequence'].next_by_code('الاسم التقني لملف التسلسل في الاكس ام ال ')
+            # ----------------------------------------------------------------
+            # return super(اسم الكلاس مديول,self).create(اللي موجود في القوس فوق بعد سيلف)
+            # الامر ده مهم عشان ينفذ الميثود الاساسيه بعد التعديل
+        return super(HosbitalAppointment, self).write(vals)
 
     # طريقه تانيه عشان اعمل relate بس بالكود علي طول  شبه ال gender
     @api.onchange('patient_id')
@@ -99,6 +124,7 @@ class HosbitalAppointment(models.Model):
             # rec.state ديه عشان تعدل علي ال حاله
 
 
+# -----------------------------------------------------------------------------------------------------------------------------------
 # هعمل موديل جديد زي ال appointment وال patient بس في نفس الصفحه
 # طبعا لازم اديله صلاحيات في ال securty
 # ولازم اديله اسم ووصف

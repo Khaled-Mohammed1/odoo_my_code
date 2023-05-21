@@ -8,11 +8,13 @@
             <form>
                 <group>
                     <group>
-                        <field name="appointment_id" string="Appointment Wizard id"/>
+                        <field name="appointment_id" string="Cancel Appointment"
+                               invisible="context.get('hide_appointment')"/>
+                        <!-- invisible="context.get('hide_appointment')" اغفاء علي حسب حاله الكونتكست اللي عملناها في الزرار -->
                         <field name="reason"/>
                     </group>
                     <group>
-                        <field name="date_cancel"/>
+                        <field name="date_cancel" readonly="1"/>
                     </group>
                 </group>
                 <!--footer عشان اتحكم في الازرار اللي هتظهر -->

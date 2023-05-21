@@ -1,5 +1,6 @@
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 import datetime
+from odoo.exceptions import ValidationError
 
 
 class CancelAppointmentWizard(models.TransientModel):
@@ -16,10 +17,19 @@ class CancelAppointmentWizard(models.TransientModel):
     def default_get(self, fields):
         res = super(CancelAppointmentWizard, self).default_get(fields)
         res['date_cancel'] = datetime.date.today()
+        # هنعمل الطريقه التانيه عشان ياخد الاى دي بتاع الكشف اللي واقفين فيه ويحطه في الخانه تلقائي
+        if self.env.context.get('active_id'):
+            res['appointment_id'] = self.env.context.get('active_id')
         return res
 
     # many2one فيلد
-    appointment_id = fields.Many2one('hosbital.appointment', string="Appointment Wizard")
+    appointment_id = fields.Many2one('hosbital.appointment', string="Appointment Wizard",
+                                     domain=[('state', '=', 'draft'), ('priority', 'in', (False, '0', '1'))])
+    # domain ده عشان احدد نقدر نلغي في انهي حاله وممكن نفس النص ده يتكتب في ال اكس ام ال
+    # بنعمل بيه فيلتر يعني
+
+    # -------------------------------------------------
+
     # فيلد من نوع text
     reason = fields.Text(string="Reason")
     # فيلد من نوع داتا
@@ -27,5 +37,8 @@ class CancelAppointmentWizard(models.TransientModel):
 
     # الزرار اللي عاملينه في الفيو في الفوتر
     def action_cancel_wiz(self):
+        if self.appointment_id.booking_date == fields.Date.today():
+            raise ValidationError(_("Sorry, Cancellation Is Not Allowed On The Same Day Of Booking day !"))
+        #  ديه عشان اخلي مينفعش نلغي الحجز اللي لسه محجوز في نفس البوم
         return
 #     هنا معرفينه مبيعملش حاجه

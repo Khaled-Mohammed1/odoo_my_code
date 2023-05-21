@@ -2,9 +2,9 @@
 
 <!--ده هعمل جواه تسلسل رقمي للمرضى مثلا  -->
 <odoo>
-<!--model="ir.sequence" ده المديول المسؤل عن صنع تسلسل -->
+    <!--model="ir.sequence" ده المديول المسؤل عن صنع تسلسل -->
     <record id="seq_hospital_patient_ref_id" model="ir.sequence">
-     <!--name = الاسم -->
+        <!--name = الاسم -->
         <field name="name">Hospital Patient Ref ID</field>
 
         <!--code = الاسم التقني  -->
@@ -19,6 +19,24 @@
         <!--company_id eval="False" ديه عشان ميظهرش اسم الشركه  -->
         <field name="company_id" eval="False"/>
 
+    </record>
+
+
+    <record id="seq_hospital_appointment_ref_id" model="ir.sequence">
+        <!--name = الاسم -->
+        <field name="name">Hospital Appointment Ref ID</field>
+
+        <!--code = الاسم التقني  -->
+        <field name="code">hospital.appointment.ref.id</field>
+
+        <!--prefix = الاحرف او الكلام اللي هيظهر في الاول قبل التسلسل -->
+        <field name="prefix">APP_</field>
+
+        <!--padding = عدد ارقام التسلسل  -->
+        <field name="padding">4</field>
+
+        <!--company_id eval="False" ديه عشان ميظهرش اسم الشركه  -->
+        <field name="company_id" eval="False"/>
     </record>
 
 </odoo>

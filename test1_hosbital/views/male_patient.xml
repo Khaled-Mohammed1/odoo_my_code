@@ -7,7 +7,7 @@
         <field name="res_model">hosbital.patient</field>
         <field name="domain">[('gender','=','male')]</field>
         <field name="view_mode">tree,form</field>
-        <field name="context">{'default_gender': 'male'}</field>
+        <field name="context">{'default_gender': 'male', 'hide_gender': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create Your First Male Patient

@@ -51,6 +51,7 @@
             <!--multi_edit="1" ديه عشان اقدر اعمل اكتر من تعديل مره واحده-->
             <tree delete="0" edit="1" decoration-success="state == 'done'" decoration-info="state == 'in_consultation'"
                   decoration-danger="state == 'cancel'" sample="1" multi_edit="1">
+                <field name="appref" string="Sequence"/>
                 <field name="patient_id"/>
                 <field name="mo_number"/>
                 <!--optional="show or hide " ديه عشان اعمل دينامك فيو ... عشان تظهرلي ال تلات نقط واخطار منها ايه يظهر وايه لا  -->
@@ -111,8 +112,18 @@
                             class="oe_highlight"
                             data-hotkey="v"/>
 
-                    <button name="action_cancel" string="Cancel" type="object" states="in_consultation,draft"
-                            data-hotkey="z"/>
+                    <button name="%(test1_hosbital.action_cancel_appointment_wiz_1)d" string="Cancel" type="action"
+                            states="in_consultation,draft"
+                            data-hotkey="z"
+                            context="{'default_reason': 'TEST Context defualt', 'hide_appointment': 1}"/>
+                    <!--context="{'default_appointment_id': active_id}" ده عشان ياخد الرقم بتاع الكشف اللي واقفين عليه اوتوماتك-->
+                    <!--مسحناها وهنعملها بطريقه تانيه في ال بايثون-->
+                    <!--'hide_appointment': 1  ديه عشان اعمل اخفاء للخانه اللي عايزها بناء علي الكونتكست ممكن اعملها اي اسم انا عايزه -->
+
+                    <!--____________________________________________________-->
+                    <!--لغينهاها عشان نحولها لاكشن فوق -->
+                    <!-- <button name="action_cancel" string="Cancel" type="object" states="in_consultation,draft"-->
+                    <!-- data-hotkey="z"/>-->
 
                     <button name="action_draft" string="Reset To Draft" type="object" states="cancel"
                             class="oe_highlight"
@@ -120,6 +131,11 @@
 
                 </header>
                 <sheet>
+                    <dev class="oe_title">
+                        <h1>
+                            <field name="appref" readonly="1"/>
+                        </h1>
+                    </dev>
                     <!--   هنا عملت ال dev عشان احدد جواها مثلا نوع الخط زي h2 -->
                     <dev>
                         <h2>

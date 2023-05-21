@@ -67,7 +67,7 @@
                         </group>
                         <group>
                             <field name="ref"/>
-                            <field name="gender"/>
+                            <field name="gender" invisible="context.get('hide_gender')"/>
                             <!--عرفت الفيلد الل many2many-->
                             <!--widget="many2many_tags" عشان تجمل الشكل -->
                             <!--options="{'color_field':'اسم الفيلد في كود البايثون اللي بيحتوي علي اللون ولازم يبقا انتجر '}" ديه عشان تلون التاج -->
