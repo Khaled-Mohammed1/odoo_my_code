@@ -1,0 +1,43 @@
+odoo json Json{
+  order_id: '47511666679099810',
+  customer: {
+    id: 4,
+    name: 'Ayman Sanni'  },
+  vendor: {
+    id: 2,
+    name: 'Another Vendor'  },
+  shipping_company: {
+    id: 1,
+    name: 'Boubyan'  },
+  invoice: {
+    date: '2022-10-25 06:25:00',
+    is_first_order: 0,
+    lines: [
+      {
+        description: 'Delivery Fee',
+        arabic_description: 'رسوم التوصيل',
+        unit_price: 0,
+        quantity: 1,
+        vat: '15%',
+        total_amount: 0      }
+    ]
+  },
+  products: {
+    date: '2022-10-25 06:25:00',
+    lines: [
+      {
+        description: 'Banana Da Madeira',
+        size: 'Banana Da Madeira',
+        quantity: 30,
+        unit_price: 1,
+        total_amount: 30,
+        vat: '15%'      }
+    ]
+  },
+  currency_code: 'SAR',
+  store_discount: 0,
+  promocode_discount: 0,
+  tip: null,
+  items_total: 30,
+  amount: 30,
+  payment_method: 'Credit Card'};

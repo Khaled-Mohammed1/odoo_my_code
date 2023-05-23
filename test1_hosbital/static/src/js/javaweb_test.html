@@ -5,7 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script></script>
+    <script>
+        <!--تحويل من json الي javascript-->
+<!--        let myJson = '{"username" : "MATRIX", "javascript" : 1}';-->
+<!--        let myJavaScript = JSON.parse(myJson);-->
+         <!--JSON.parse() تحويل الي جافاسكربت-->
+
+<!--        console.log(myJson);-->
+<!--        console.log(typeof myJson);-->
+
+<!--        console.log(myJavaScript);-->
+<!--        console.log(typeof myJavaScript);-->
+<!--______________________________________________________________-->
+
+         <!--هنا هنعمل العكس هنحول من جافا سكربت الي جيسون -->
+       let myJavaScript = { username : "MATRIX", javascript : 1};
+       let myJson = JSON.stringify(myJavaScript);
+
+       console.log(myJavaScript);
+       console.log(typeof myJavaScript);
+
+       console.log(myJson);
+       console.log(typeof myJson);
+
+
+
+
+    </script>
     <script src="framework_sample_test.js"></script>
 </head>
 <body></body>

@@ -1,0 +1,44 @@
+{
+  "username": "Khaled Matrix",
+  "country": "Egypt",
+  "skills": [
+    [
+      "HTML",
+      "Pugjs",
+      "Haml"
+    ],
+    [
+      "CSS",
+      "Sass",
+      "Less"
+    ],
+    [
+      "Js",
+      "Babel"
+    ]
+  ],
+  "skillsProgress": [
+    {
+      "Html": "60%",
+      "Pugjs": "50%"
+    },
+    {
+      "Css": "70%",
+      "Sass": "60%"
+    }
+  ],
+  "addresses": {
+    "Egypt": "6 October",
+    "KSA": "Malaz",
+    "USA": "California",
+    "Germany": [
+      "One",
+      "Two",
+      "Three"
+    ]
+  },
+  "Age": 29,
+  "Working": false,
+  "identity": null
+}
+
