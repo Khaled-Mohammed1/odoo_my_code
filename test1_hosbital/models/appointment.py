@@ -1,4 +1,5 @@
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
 
 class HosbitalAppointment(models.Model):
@@ -47,6 +48,8 @@ class HosbitalAppointment(models.Model):
     hide_sales_price = fields.Boolean(string="Hide Sales Price")
     appref = fields.Char(string="appointment reference")
 
+    # __________________________________________________________________________________________________________________
+
     @api.model
     def create(self, vals):
         # هنا بنعدل علي ميثود الانشاء
@@ -57,6 +60,16 @@ class HosbitalAppointment(models.Model):
         # return super(اسم الكلاس مديول,self).create(اللي موجود في القوس فوق بعد سيلف)
         # الامر ده مهم عشان ينفذ الميثود الاساسيه بعد التعديل
         return super(HosbitalAppointment, self).create(vals)
+
+    # ------------------------------------------------------------------------------------------------------------------
+    # ديه عشان اخلي مينفعش امسح الكشف لو حالته done او in cosultation
+    def unlink(self):
+        if self.state == 'done' or self.state == 'in_consultation':
+            # if self.state != 'draft': ممكن اكتبها كده
+            raise ValidationError(_("You Can Delete The Appointment Only That In Draft State"))
+        return super(HosbitalAppointment, self).unlink()
+
+    # ------------------------------------------------------------------------------------------------------------------
 
     # method overwrite
     # ده عشان نعدل علي التعديل ان في حاله ان ال رقم التسلسلي فاضي ضيف تسلسل
@@ -71,10 +84,14 @@ class HosbitalAppointment(models.Model):
             # الامر ده مهم عشان ينفذ الميثود الاساسيه بعد التعديل
         return super(HosbitalAppointment, self).write(vals)
 
+    # __________________________________________________________________________________________________________________
+
     # طريقه تانيه عشان اعمل relate بس بالكود علي طول  شبه ال gender
     @api.onchange('patient_id')
     def onchange_patient_id(self):
         self.ref = self.patient_id.ref
+
+    # __________________________________________________________________________________________________________________
 
     #     كود عشان نجرب ننفذ ال زرار من نوع object
     def action_test(self):
@@ -92,6 +109,8 @@ class HosbitalAppointment(models.Model):
             }
         }
 
+    # __________________________________________________________________________________________________________________
+
     # في حاله الضغط علي زر action_in_consultation هتغير الحاله الي in_consultation
     # ده الفانكشن اللي هيتنفذ لما ندوس علي الزراير اللي عملناها في ال هيدر في الفيو
     def action_in_consultation(self):
@@ -99,11 +118,15 @@ class HosbitalAppointment(models.Model):
             rec.state = 'in_consultation'
         # rec.state ديه عشان تعدل علي ال حاله
 
+    # __________________________________________________________________________________________________________________
+
     # في حاله الضغط علي زر action_in_consultation هتغير الحاله الي done
     def action_done(self):
         for rec in self:
             rec.state = 'done'
             # rec.state ديه عشان تعدل علي ال حاله
+
+    # __________________________________________________________________________________________________________________
 
     # الطريقه التانيه اللي تخليني بالضغط علي الزر اروح لصفحه Cancel appointment wizard
     def action_cancel(self):
@@ -117,6 +140,8 @@ class HosbitalAppointment(models.Model):
         #     rec.state = 'cancel'
         # rec.state ديه عشان تعدل علي ال حاله
 
+    # __________________________________________________________________________________________________________________
+
     # في حاله الضغط علي زر action_in_consultation هتغير الحاله الي draft
     def action_draft(self):
         for rec in self:
@@ -124,7 +149,7 @@ class HosbitalAppointment(models.Model):
             # rec.state ديه عشان تعدل علي ال حاله
 
 
-# -----------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # هعمل موديل جديد زي ال appointment وال patient بس في نفس الصفحه
 # طبعا لازم اديله صلاحيات في ال securty
 # ولازم اديله اسم ووصف
@@ -146,3 +171,5 @@ class AppointmentPharmacyLines(models.Model):
 
     # هعمل هنا فيلد many2one عشان اعمل ريليشن بين الموديل ده والموديل الرئيسي
     appointment_id = fields.Many2one('hosbital.appointment', string="Appointment")
+
+    # __________________________________________________________________________________________________________________

@@ -11,7 +11,7 @@ class HosbitalPatient(models.Model):
     name = fields.Char(string="Name", tracking=True)
     ref = fields.Char(string="reference", tracking=True)
     date_of_birth = fields.Date(string="Date Of Birth")
-    age = fields.Integer(string="Age", compute='_compute_age', tracking=True)
+    age = fields.Integer(string="Age", compute='_compute_age', tracking=True, store=True)
     gender = fields.Selection([('male', 'Male'), ('female', 'Female')], string=' Gender', tracking=True)
     active = fields.Boolean(string="Active", default=True, tracking=True)
     number = fields.Char(string="Mobile Number", size=11)
@@ -22,12 +22,16 @@ class HosbitalPatient(models.Model):
     # 'First t name اسم اول كولم في العلاقه ' ,'second t name اسم الكولم التاني في العلاقه ' string='Tags')
     tag_ids = fields.Many2many('patient.tags', 'many2may_tags', 'pi', 'ti', string='Tags')
 
+    # __________________________________________________________________________________________________________________
+
     # ده عشان اخلي مينفعش ادخل تاريخ ميلاد بعد تاريخ اليوم
     @api.constrains('date_of_birth')
     def _check_date_of_birth(self):
         for rec in self:
             if rec.date_of_birth and rec.date_of_birth > fields.Date.today():
                 raise ValidationError(_("The Entered Date Of Birth Is Not Acceptable"))
+
+    # __________________________________________________________________________________________________________________
 
     # method overwrite
     # عشان اعمل اوفررايت علي الميثود اللي موجوده يبقا بالشكل ده
@@ -43,6 +47,8 @@ class HosbitalPatient(models.Model):
         # الامر ده مهم عشان ينفذ الميثود الاساسيه بعد التعديل
         return super(HosbitalPatient, self).create(vals)
 
+    # __________________________________________________________________________________________________________________
+
     # method overwrite
     # ده عشان نعدل علي التعديل ان في حاله ان ال رقم التسلسلي فاضي ضيف تسلسل
     def write(self, vals):
@@ -55,6 +61,8 @@ class HosbitalPatient(models.Model):
             # return super(اسم الكلاس مديول,self).create(اللي موجود في القوس فوق بعد سيلف)
             # الامر ده مهم عشان ينفذ الميثود الاساسيه بعد التعديل
         return super(HosbitalPatient, self).write(vals)
+
+    # __________________________________________________________________________________________________________________
 
     # عشان اخلي السن يتحسب اوتوماتك من تاريخ الميلاد
     @api.depends('date_of_birth')
@@ -70,12 +78,19 @@ class HosbitalPatient(models.Model):
             else:
                 rec.age = 0
 
+    # __________________________________________________________________________________________________________________
+
     # ده عشان الاسم اللي هيظهر في ال appointment يبقا رقم المريض واسمه
     def name_get(self):
         return [(record.id, "[%s] %s" % (record.ref, record.name)) for record in self]
         # return [(record.id, "[اول واحده اللي هيه ال ref] record.name" % (record.ref, record.name)) for record in self]
         # عملت table  بتحتوي علي الرقم والاسم
 
+    # __________________________________________________________________________________________________________________
+
+    # ديه عشان اخلي الرقم الموبيال مينفعش يتكرر في السيستم
     _sql_constraints = [
         ('number_uniq', 'unique (number)', "Mobile Number Already Exists !"),
     ]
+
+    # __________________________________________________________________________________________________________________

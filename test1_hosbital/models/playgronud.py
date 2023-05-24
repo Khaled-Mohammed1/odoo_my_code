@@ -13,6 +13,8 @@ class OdooPlayground(models.Model):
     code = fields.Text(string='code', default=DEFAULT_ENV_VARIABLES)
     result = fields.Text(string='Result')
 
+    # __________________________________________________________________________________________________________________
+
     def action_execute(self):
         try:
             if self.model_id:
@@ -22,3 +24,5 @@ class OdooPlayground(models.Model):
             self.result = safe_eval(self.code.strip(), {'self': model})
         except Exception as e:
             self.result = str(e)
+
+    # __________________________________________________________________________________________________________________
