@@ -9,7 +9,9 @@ class HosbitalAppointment(models.Model):
     # ديه عشان يظهر اسم المريض فوق جمب اسم الصفحه (appointment /  او رقمه او اي حاجه عايزها تتعرض name of patient )
     _rec_name = 'appref'
 
-    patient_id = fields.Many2one(comodel_name='hosbital.patient', string="patient")
+    patient_id = fields.Many2one(comodel_name='hosbital.patient', string="patient", ondelete='restrict')
+    # ondelete='restrict' ديه معناها مينفعش امسح المريض طول ما ليه مثلا كشف
+    # ondelete='cascade' ديه معناها لو مسحت المريض همسج كل الكوشوفات الخاصه بيه كمان
     mo_number = fields.Char(related='patient_id.number')
     gender = fields.Selection(related='patient_id.gender')
     active = fields.Boolean(string="Active", default=True, tracking=True)
@@ -115,7 +117,8 @@ class HosbitalAppointment(models.Model):
     # ده الفانكشن اللي هيتنفذ لما ندوس علي الزراير اللي عملناها في ال هيدر في الفيو
     def action_in_consultation(self):
         for rec in self:
-            rec.state = 'in_consultation'
+            if rec.state == 'draft':
+                rec.state = 'in_consultation'
         # rec.state ديه عشان تعدل علي ال حاله
 
     # __________________________________________________________________________________________________________________

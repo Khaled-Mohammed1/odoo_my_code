@@ -21,6 +21,24 @@ class HosbitalPatient(models.Model):
     # tag_ids = fields.Many2many('co model الموديل الي هاخد منه العلاقه', 'DB table Name اسم التيبول ديه في الداتا بيز',
     # 'First t name اسم اول كولم في العلاقه ' ,'second t name اسم الكولم التاني في العلاقه ' string='Tags')
     tag_ids = fields.Many2many('patient.tags', 'many2may_tags', 'pi', 'ti', string='Tags')
+    # هنعمل خانه بتعد عدد الكشوفات لكل مريض
+    appointment_count = fields.Integer(string="NO Of Appointment", compute='_compute_appointment_count', store=True)
+    # ده فيلد علاقه عشان اقدر اخزن قيمه ال appointment_cont في الداتا بيز
+    appointment_ids = fields.One2many('hosbital.appointment', 'patient_id', string="")
+
+    parent = fields.Char(string="Parent")
+    marital_status = fields.Selection([('married', 'Married'), ('single', 'Single')], string="Marital Status",
+                                      tracking=True)
+    partner_name = fields.Char(string="Partner Name")
+
+    # __________________________________________________________________________________________________________________
+
+    # تعريف الخانه اللي بتعد عدد الكشوفات لكل مريض
+    @api.depends('appointment_ids')
+    def _compute_appointment_count(self):
+        for rec in self:
+            rec.appointment_count = self.env['hosbital.appointment'].search_count([('patient_id', '=', rec.id)])
+        # self.env['المديول اللي هنعمل بحث فيه '].search_بالعدد([('القيمه اللي بندور بيها ', '=', rec.id)])
 
     # __________________________________________________________________________________________________________________
 

@@ -50,7 +50,11 @@
             <!--sample="1" ديه عشان يوريني امثله علي الداتا -->
             <!--multi_edit="1" ديه عشان اقدر اعمل اكتر من تعديل مره واحده-->
             <tree delete="0" edit="1" decoration-success="state == 'done'" decoration-info="state == 'in_consultation'"
-                  decoration-danger="state == 'cancel'" sample="1" multi_edit="1">
+                  decoration-danger="state == 'cancel'" sample="1" multi_edit="1" export_xlsx="0">
+                <header>
+                    <!--header عشان اضيف مثلا زراير فوق -->
+                    <button name="action_in_consultation" string="In Consultation" type="object"/>
+                </header>
                 <field name="appref" string="Sequence"/>
                 <field name="patient_id"/>
                 <field name="mo_number"/>
@@ -83,6 +87,8 @@
                 <!--   decoration.danger=red-->
                 <!--   decoration.warning=orange-->
                 <!--   decoration.muted= no color-->
+                <button name="action_done" type="object" class="fa fa-hand-peace-o btn-success"
+                        attrs="{'invisible':[('state', '=' , 'done')]}"/>
             </tree>
         </field>
     </record>

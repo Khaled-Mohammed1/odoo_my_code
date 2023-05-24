@@ -10,6 +10,7 @@
                 <field name="number"/>
                 <field name="ref"/>
                 <field name="age"/>
+                <field name="appointment_count"/>
                 <field name="gender"/>
                 <filter name="male_filter" string="Male Patient" domain="[('gender','=','male')]"/>
                 <filter name="female_filter" string="Female Patient" domain="[('gender','=','female')]"/>
@@ -32,11 +33,12 @@
         <field name="name">hosbital.patient_tree</field>
         <field name="model">hosbital.patient</field>
         <field name="arch" type="xml">
-            <tree sample="1">
+            <tree sample="1" export_xlsx="0">
                 <field name="name" string="Patient Name"/>
                 <field name="number"/>
                 <field name="ref"/>
                 <field name="age"/>
+                <field name="appointment_count"/>
                 <field name="gender"/>
                 <!--عرفت الفيلد الل many2many-->
                 <!--widget="many2many_tags" عشان تجمل الشكل -->
@@ -57,22 +59,43 @@
                     <!--widget="image" ديه عشان تعرض الصوره -->
                     <!--class="oe_avatar" ديه عشان تنظم شكل الصوره وتخليها فوق علي اليمين-->
                     <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <!--default_focus="1" عشان الماوس يحددها تلقاءي اول لما اعمل انشاء او تعديل -->
+                            <label for="name" string="Name" class="oe_edit_only"/>
+                            <!-- ديه ليبول عشان تظهر اسم الفيلد بس في حاله التعديل فقط-->
+                            <field name="name" default_focus="1"/>
+                        </h1>
+                        <h4>
+                            <field name="ref" readonly="1"/>
+                        </h4>
+                    </div>
                     <group>
                         <group>
-                            <field name="name" default_focus="1"/>
-                            <!--default_focus="1" عشان الماوس يحددها تلقاءي اول لما اعمل انشاء او تعديل -->
                             <field name="number"/>
                             <field name="date_of_birth"/>
                             <field name="age"/>
+                            <field name="appointment_count"/>
                         </group>
                         <group>
-                            <field name="ref"/>
                             <field name="gender" invisible="context.get('hide_gender')"/>
                             <!--عرفت الفيلد الل many2many-->
                             <!--widget="many2many_tags" عشان تجمل الشكل -->
                             <!--options="{'color_field':'اسم الفيلد في كود البايثون اللي بيحتوي علي اللون ولازم يبقا انتجر '}" ديه عشان تلون التاج -->
                             <field name="tag_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
                             <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Other Information" name="other_info">
+                        <group>
+                            <field name="parent" attrs="{'invisible': [('age', '>', 18)]}"/>
+                            <!-- attrs="{'invisible': [('age', '>', 18)]}" ده شرط يخفي الخانه ديه لو السن اكبر من 18-->
+                            <!-- attrs="{'invisible': [('age', '>', 18), ('', '', '')]}" ده لو عايز اضيف كذا شرط بس هنا العلاقه  اند   -->
+                            <!-- attrs="{'invisible': ['|' ('age', '>', 18), ('', '', '')]}" ده لو عايزالعلاقه اور    -->
+                            <field name="marital_status" attrs="{'invisible': [('age', '&lt;=', 18)]}"/>
+                            <field name="partner_name"
+                                   attrs="{'readonly': [('marital_status', '!=' , 'married')],
+                                   'required': [('marital_status', '=' , 'married')]}"/>
                         </group>
                     </group>
                 </sheet>
