@@ -40,5 +40,6 @@ class CancelAppointmentWizard(models.TransientModel):
         if self.appointment_id.booking_date == fields.Date.today():
             raise ValidationError(_("Sorry, Cancellation Is Not Allowed On The Same Day Of Booking day !"))
         #  ديه عشان اخلي مينفعش نلغي الحجز اللي لسه محجوز في نفس البوم
+        self.appointment_id.state = 'cancel'
         return
 #     هنا معرفينه مبيعملش حاجه

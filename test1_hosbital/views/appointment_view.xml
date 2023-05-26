@@ -88,7 +88,14 @@
                 <!--   decoration.warning=orange-->
                 <!--   decoration.muted= no color-->
                 <button name="action_done" type="object" class="fa fa-hand-peace-o btn-success"
-                        attrs="{'invisible':[('state', '=' , 'done')]}"/>
+                        attrs="{'invisible':[('state', '!=' , 'in_consultation')]}"/>
+
+                <button name="%(test1_hosbital.action_cancel_appointment_wiz_1)d" type="action"
+                        context="{'default_reason': 'TEST Context defualt', 'hide_appointment': 1}"
+                        attrs="{'invisible': [('state', '!=', 'in_consultation'),('state','!=', 'draft')]}"
+                        class="fa fa-times-circle btn-danger"/>
+                <!--  attrs="{'invisible': [('state', '!=', 'in_consultation'),('state','!=', 'draft')]}"-->
+                <!--  attrs="{'invisible': [('state', 'not in', ('in_consultation','draft')]}"  ممكن تتكتب كده -->
             </tree>
         </field>
     </record>

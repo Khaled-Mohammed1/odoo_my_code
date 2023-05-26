@@ -106,6 +106,16 @@ class HosbitalPatient(models.Model):
 
     # __________________________________________________________________________________________________________________
 
+    # ديه طريقه تانيه عشان اخلي مينفعش امسح المريض لو عنده كشوفات
+    # at_uninstall=True ديه بخلي مينفعش الغي تصطيب المديول لو في كوشفات محجوزه
+    @api.ondelete(at_uninstall=True)
+    def _check_appointments(self):
+        for rec in self:
+            if rec.appointment_ids:
+                raise ValidationError(_("Yoe Cannot Delete Or Uninstall Because There Is A Patient With Appointments "))
+
+    # __________________________________________________________________________________________________________________
+
     # ديه عشان اخلي الرقم الموبيال مينفعش يتكرر في السيستم
     _sql_constraints = [
         ('number_uniq', 'unique (number)', "Mobile Number Already Exists !"),
