@@ -96,6 +96,10 @@
                         class="fa fa-times-circle btn-danger"/>
                 <!--  attrs="{'invisible': [('state', '!=', 'in_consultation'),('state','!=', 'draft')]}"-->
                 <!--  attrs="{'invisible': [('state', 'not in', ('in_consultation','draft')]}"  ممكن تتكتب كده -->
+                <groupby name="patient_id">
+                    <button name="action_test1" string="Click Me" type="object" class="oe_highlight"/>
+                    <button name="edit" string="Edit" type="edit" class="oe_highlight"/>
+                </groupby>
             </tree>
         </field>
     </record>

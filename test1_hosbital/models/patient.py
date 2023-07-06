@@ -1,6 +1,7 @@
 from odoo import api, fields, models, _
 from datetime import date
 from odoo.exceptions import ValidationError
+from dateutil import relativedelta
 
 
 class HosbitalPatient(models.Model):
@@ -11,7 +12,8 @@ class HosbitalPatient(models.Model):
     name = fields.Char(string="Name", tracking=True)
     ref = fields.Char(string="reference", tracking=True)
     date_of_birth = fields.Date(string="Date Of Birth")
-    age = fields.Integer(string="Age", compute='_compute_age', tracking=True, store=True)
+    age = fields.Integer(string="Age", compute='_compute_age', inverse='_inverse_compute_age', tracking=True,
+                         store=True)
     gender = fields.Selection([('male', 'Male'), ('female', 'Female')], string=' Gender', tracking=True)
     active = fields.Boolean(string="Active", default=True, tracking=True)
     number = fields.Char(string="Mobile Number", size=11)
@@ -97,6 +99,14 @@ class HosbitalPatient(models.Model):
                 rec.age = 0
 
     # __________________________________________________________________________________________________________________
+    # عشان يحسب تاريخ الميلاد من السن المدخل
+    @api.depends('age')
+    def _inverse_compute_age(self):
+        for rec in self:
+            today = date.today()
+            rec.date_of_birth = today - relativedelta.relativedelta(years=rec.age)
+
+    # __________________________________________________________________________________________________________________
 
     # ده عشان الاسم اللي هيظهر في ال appointment يبقا رقم المريض واسمه
     def name_get(self):
@@ -122,3 +132,6 @@ class HosbitalPatient(models.Model):
     ]
 
     # __________________________________________________________________________________________________________________
+    def action_test1(self):
+        print("Button clicked")
+        return
